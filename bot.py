@@ -49,7 +49,8 @@ def reply(msg):
     if "text" in msg:
         text = msg['text'].replace("@" + bot.getMe()["username"], "")
     else:
-        bot.sendMessage(chatId, "🤨 Media non supportati. /help")
+        if chatId > 0:
+            bot.sendMessage(chatId, "🤨 Media non supportati. /help")
         return
 
     if not User.exists(lambda u: u.chatId == chatId):
@@ -143,7 +144,7 @@ def reply(msg):
             bot.sendMessage(chatId, "Hai disattivato le notifiche!\n"
                                     "Usa /notifiche per attivarle.")
 
-    else:
+    elif chatId > 0:
         bot.sendMessage(chatId, "Non ho capito...\n"
                                 "Serve aiuto? Premi /help")
 
