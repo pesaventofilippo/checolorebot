@@ -4,13 +4,15 @@ from modules.helpers import regionList
 
 def regions():
     keyboard = []
-    for n in range(0, 20, 2):
-        first = regionList[n]
-        second = regionList[n+1]
-        keyboard.append([
-            InlineKeyboardButton(text=first, callback_data="setregion#{}".format(first)),
-            InlineKeyboardButton(text=second, callback_data="setregion#{}".format(second)),
-        ])
+    line = []
+    for name in regionList:
+        line.append(InlineKeyboardButton(text=name, callback_data="setregion#{}".format(name)))
+        if len(line) == 2:
+            keyboard.append(line.copy())
+            line.clear()
+    if len(line) > 0:
+        keyboard.append(line.copy())
+        line.clear()
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 

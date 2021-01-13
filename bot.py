@@ -109,7 +109,8 @@ def reply(msg):
 
         elif user.status == "selecting_region":
             bot.sendMessage(chatId, "Benvenuto/a, <b>{}</b>!\n"
-                                    "Scegli la tua regione:".format(name),
+                                    "Scegli la tua regione:\n\n"
+                                    "<i>Nota: il Trentino è diviso nelle province di Trento e Bolzano.</i>".format(name),
                             parse_mode="HTML", reply_markup=keyboards.regions())
 
 
@@ -124,7 +125,9 @@ def reply(msg):
                                 user.region.name, user.region.color, user.region.updatedTime), parse_mode="HTML")
 
     elif text == "/setregion":
-        bot.sendMessage(chatId, "Scegli la tua regione:", reply_markup=keyboards.regions())
+        bot.sendMessage(chatId, "Scegli la tua regione:\n\n"
+                                "<i>Nota: il Trentino è diviso nelle province di Trento e Bolzano.</i>",
+                        parse_mode="HTML", reply_markup=keyboards.regions())
 
     elif text == "/notifiche":
         bot.sendMessage(chatId, "<b>Le notifiche sono {}.</b>\n\n"
