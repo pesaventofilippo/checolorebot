@@ -1,6 +1,6 @@
 from requests import get
 from bs4 import BeautifulSoup
-from modules.helpers import regionList, getColors
+from modules.helpers import regionList, getColors, nameToId
 
 
 def getData():
@@ -9,8 +9,7 @@ def getData():
     data = {}
     for region in regionList:
         data[region] = "n/a"
-        regName = region.replace(" ", "").replace("-", "").replace("'", "").lower()
-        res = html.find("path", id=regName)
+        res = html.find("path", id=nameToId(region))
         if res:
             raw = res.attrs["onclick"]
             for color in getColors():

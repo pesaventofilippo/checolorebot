@@ -1,7 +1,8 @@
 ﻿# Python Libraries
 from time import sleep
-from telepotpro import Bot
+from telepotpro import Bot, glance
 from telepotpro.exception import TelegramError, BotWasBlockedError
+from telepotpro.namedtuple import InlineQueryResultArticle, InputTextMessageContent
 from threading import Thread
 from pony.orm import db_session, select
 from datetime import datetime
@@ -89,7 +90,7 @@ def reply(msg):
 
     elif text == "/update" and chatId in js_settings["admins"]:
         runUpdates(datetime.now())
-        bot.sendMessage(chatId, "✅ Aggiornamento globale completato!")
+        bot.sendMessage(chatId, "✅ Aggiornamento completato!")
 
     elif text == "/users" and chatId in js_settings["admins"]:
         totalUsers = len(select(u for u in User)[:])
@@ -207,14 +208,41 @@ def button_press(msg):
                                     parse_mode="HTML", reply_markup=keyboards.notifiche())
 
 
+@db_session
+def query(msg):
+    queryId, chatId, queryString = glance(msg, flavor='inline_query')
+    text = helpers.nameToId(queryString)
+    regions = select(r for r in Regione)[:]
+
+    results = [
+        InlineQueryResultArticle(
+            id="reg_{}".format(region.name),
+            title=region.name,
+            input_message_content=InputTextMessageContent(
+                message_text="{} <b>{}</b> oggi è: {}.\n"
+                             "<i>Ultimo aggiornamento: {}</i>".format(helpers.getEmoji(region.color),
+                             region.name, region.color, region.updatedTime),
+                parse_mode="HTML"
+            ),
+            description="{} {}".format(helpers.getEmoji(region.color), region.color),
+            thumb_url="https://pesaventofilippo.com/assets/images/projects/checolorebot.png"
+        )
+        for region in regions if text in helpers.nameToId(region.name)
+    ]
+    bot.answerInlineQuery(queryId, results, cache_time=3600, is_personal=False)
+
+
 def accept_message(msg):
     Thread(target=reply, args=[msg]).start()
 
 def accept_button(msg):
     Thread(target=button_press, args=[msg]).start()
 
+def incoming_query(msg):
+    Thread(target=query, args=[msg]).start()
+
 bot.message_loop(
-    callback={'chat': accept_message, 'callback_query': accept_button}
+    callback={'chat': accept_message, 'callback_query': accept_button, 'inline_query': incoming_query}
 )
 
 while True:

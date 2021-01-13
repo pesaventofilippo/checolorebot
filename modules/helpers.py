@@ -19,3 +19,7 @@ def getEmoji(color: str):
 
 def getColors():
     return [x.lower() for x in colorEmojis.keys() if x != "n/a"]
+
+
+def nameToId(name: str):
+    return name.lower().replace(" ", "").replace("-", "").replace("'", "")
