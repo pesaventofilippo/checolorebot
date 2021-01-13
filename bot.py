@@ -51,9 +51,6 @@ def reply(msg):
         bot.sendMessage(chatId, "🤨 Media non supportati. /help")
         return
 
-    if chatId < 0:
-        return
-
     if not User.exists(lambda u: u.chatId == chatId):
         User(chatId=chatId)
     user = User.get(chatId=chatId)
