@@ -31,7 +31,8 @@ def runUpdates(now):
 @db_session
 def runDailyUpdates(now):
     for user in select(u for u in User if u.wantsNotifications):
-        if user.dailyUpdatesTime == "{}:{}".format(now.hour, now.minute):
+        userHour = user.dailyUpdatesTime.split(":")
+        if int(userHour[0]) == now.hour and int(userHour[1]) == now.minute:
             try:
                 bot.sendMessage(user.chatId, "Buongiorno! 👋\n"
                                              "{} <b>{}</b> oggi è: {}.".format(helpers.getEmoji(user.region.color),
