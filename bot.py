@@ -47,7 +47,7 @@ def reply(msg):
     chatId = msg['chat']['id']
     name = msg['from']['first_name']
     if "text" in msg:
-        text = msg['text']
+        text = msg['text'].replace("@" + bot.getMe()["username"], "")
     else:
         bot.sendMessage(chatId, "🤨 Media non supportati. /help")
         return
