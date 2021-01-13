@@ -13,7 +13,7 @@ class Regione(db.Entity):
 
 
 class User(db.Entity):
-    chatId = Required(int, sql_type='BIGINT')
+    chatId = Required(int, sql_type='BIGINT', size=64)
     status = Required(str, default="selecting_region")
     wantsNotifications = Required(bool, default=True)
     dailyUpdatesTime = Required(str, default="08:00")
