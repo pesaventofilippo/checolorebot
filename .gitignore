@@ -1,0 +1,9 @@
+# Bot Database
+checolorebot.db
+
+# Bot Settings
+settings.json
+
+*__pycache__/
+.idea/
+.vscode/
