@@ -223,7 +223,7 @@ def button_press(msg):
         data_split = data.split("#")
         colore = data_split[0]
         categoria = data_split[1]
-        page = data_split[2]
+        page = int(data_split[2])
 
         pages = helpers.getInfo(colore, categoria)
         bot.editMessageText((chatId, msgId), pages[page], parse_mode="HTML",
