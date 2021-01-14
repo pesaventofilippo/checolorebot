@@ -66,27 +66,27 @@ def infoPages(colore: str, categoria: str, page: int=0, totPages: int=1):
     # Una pagina
     if totPages == 1:
         return InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="↩️ Indietro", callback_data="infoColore#{}".format(colore))
+            InlineKeyboardButton(text="↩️ Menù", callback_data="infoColore#{}".format(colore))
         ]])
     # Più pagine, prima pagina
     elif page == 0:
         return InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="➡️ Pag. {}".format(page+2), callback_data="catInfo#{}#{}#{}".format(colore, categoria, page+1))
+            InlineKeyboardButton(text="➡️ Avanti", callback_data="catInfo#{}#{}#{}".format(colore, categoria, page+1))
         ], [
-            InlineKeyboardButton(text="↩️ Indietro", callback_data="infoColore#{}".format(colore))
+            InlineKeyboardButton(text="↩️ Menù", callback_data="infoColore#{}".format(colore))
         ]])
     # Più pagine, ultima pagina
     elif (page + 1) == totPages:
         return InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="⬅️ Pag. {}".format(page), callback_data="catInfo#{}#{}#{}".format(colore, categoria, page-1))
+            InlineKeyboardButton(text="⬅️ Indietro", callback_data="catInfo#{}#{}#{}".format(colore, categoria, page-1))
         ], [
-            InlineKeyboardButton(text="↩️ Indietro", callback_data="infoColore#{}".format(colore))
+            InlineKeyboardButton(text="↩️ Menù", callback_data="infoColore#{}".format(colore))
         ]])
     # Più pagine, in mezzo
     else:
         return InlineKeyboardMarkup(inline_keyboard=[[
-            InlineKeyboardButton(text="⬅️ Pag. {}".format(page), callback_data="catInfo#{}#{}#{}".format(colore, categoria, page-1)),
-            InlineKeyboardButton(text="➡️ Pag. {}".format(page + 2), callback_data="catInfo#{}#{}#{}".format(colore, categoria, page+1))
+            InlineKeyboardButton(text="⬅️ Indietro", callback_data="catInfo#{}#{}#{}".format(colore, categoria, page-1)),
+            InlineKeyboardButton(text="➡️ Avanti", callback_data="catInfo#{}#{}#{}".format(colore, categoria, page+1))
         ], [
-            InlineKeyboardButton(text="↩️ Indietro", callback_data="infoColore#{}".format(colore))
+            InlineKeyboardButton(text="↩️ Menù", callback_data="infoColore#{}".format(colore))
         ]])
