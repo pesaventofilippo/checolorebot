@@ -71,7 +71,7 @@ def nameToId(name: str):
 def getInfo(color: str, category: str):
     from modules.database import Info
     with db_session:
-        info = Info.get(id=0)
+        info = Info.get(id=1)
         raw = info.data
     try:
         res = raw[color][category]
