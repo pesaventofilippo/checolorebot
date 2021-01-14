@@ -159,7 +159,7 @@ def button_press(msg):
         msgId = msg['message']['message_id']
         msgIdent = (chatId, msgId)
     except KeyError:
-        chatId = msg['message']['from']['id']
+        chatId = msg['from']['id']
         msgIdent = msg['inline_message_id']
     query_split = msg['data'].split("#", 1)
     button = query_split[0]
