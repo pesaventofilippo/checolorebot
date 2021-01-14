@@ -62,6 +62,3 @@ def getInfo():
             tagIndex += 1
 
     return data
-
-
-getInfo()
