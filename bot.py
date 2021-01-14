@@ -122,7 +122,8 @@ def reply(msg):
         bot.sendMessage(chatId, "Benvenuto/a, <b>{}</b>!\n"
                                 "{} <b>{}</b> oggi è: {}.\n"
                                 "<i>Ultimo aggiornamento: {}</i>".format(name, helpers.getEmoji(user.region.color),
-                                user.region.name, user.region.color, user.region.updatedTime), parse_mode="HTML")
+                                user.region.name, user.region.color, user.region.updatedTime),
+                        parse_mode="HTML", reply_markup=keyboards.infoColore(user.region.color))
 
     elif text == "/setregion":
         bot.sendMessage(chatId, "Scegli la tua regione:\n\n"
@@ -207,6 +208,21 @@ def button_press(msg):
                                     "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
                                     "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
                                     parse_mode="HTML", reply_markup=keyboards.notifiche())
+
+    elif button == "infoColore":
+        if data in helpers.getColors():
+            bot.sendMessage(chatId, "{} Info sul colore: <b>{}</b>:".format(helpers.getEmoji(data), data),
+                            parse_mode="HTML", reply_markup=keyboards.categorieInfo(data))
+
+        else:
+            bot.sendMessage(chatId, "🤔 Info sul colore non trovate.")
+
+    elif button == "catInfo":
+        data_split = data.split("#", 1)
+        colore = data_split[0]
+        categoria = data_split[1]
+        bot.editMessageText((chatId, msgId), helpers.getInfo(colore, categoria),
+                            parse_mode="HTML", disable_web_page_preview=True, reply_markup=keyboards.backInfo(colore))
 
 
 @db_session

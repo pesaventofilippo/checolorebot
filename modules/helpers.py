@@ -12,6 +12,47 @@ colorEmojis = {
     "n/a": "❓"
 }
 
+rules = {
+    "giallo": {
+        "attcom": "",
+        "attpro": "",
+        "attsport": "",
+        "eventi": "",
+        "uffici": "",
+        "sanzioni": "",
+        "sposta": "",
+        "uni": "",
+        "lavoro": "",
+        "mascherine": ""
+    },
+
+    "arancione": {
+        "attcom": "",
+        "attpro": "",
+        "attsport": "",
+        "eventi": "",
+        "uffici": "",
+        "sanzioni": "",
+        "sposta": "",
+        "uni": "",
+        "lavoro": "",
+        "mascherine": ""
+    },
+
+    "rosso": {
+        "attcom": "",
+        "attpro": "",
+        "attsport": "",
+        "eventi": "",
+        "uffici": "",
+        "sanzioni": "",
+        "sposta": "",
+        "uni": "",
+        "lavoro": "",
+        "mascherine": ""
+    }
+}
+
 
 def getEmoji(color: str):
     return colorEmojis[color] if color in colorEmojis else colorEmojis["n/a"]
@@ -23,3 +64,11 @@ def getColors():
 
 def nameToId(name: str):
     return name.lower().replace(" ", "").replace("-", "").replace("'", "")
+
+
+def getInfo(color: str, category: str):
+    try:
+        res = rules[color][category]
+        return res if res != "" else "🤔 Info non disponibili."
+    except KeyError:
+        return "🤔 Info non disponibili."

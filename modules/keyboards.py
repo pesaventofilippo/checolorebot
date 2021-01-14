@@ -32,3 +32,37 @@ def notifiche():
     ], [
         InlineKeyboardButton(text="✅ Fatto", callback_data="notifToggle#done")
     ]])
+
+
+def infoColore(colore: str):
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="ℹ️ Cosa significa?", callback_data="infoColore#{}".format(colore))
+    ]])
+
+
+def categorieInfo(colore: str):
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="🍽 Attività Commerciali", callback_data="catInfo#{}#attcom".format(colore))
+    ], [
+        InlineKeyboardButton(text="🖥 Attività Professionali", callback_data="catInfo#{}#attpro".format(colore)),
+    ], [
+        InlineKeyboardButton(text="⚽️ Attività Sportive", callback_data="catInfo#{}#attsport".format(colore)),
+    ], [
+        InlineKeyboardButton(text="👥 Eventi / Riunioni", callback_data="catInfo#{}#eventi".format(colore)),
+    ], [
+        InlineKeyboardButton(text="🏢 Uffici Pubblici", callback_data="catInfo#{}#uffici".format(colore)),
+    ], [
+        InlineKeyboardButton(text="📄 Sanzioni", callback_data="catInfo#{}#sanzioni".format(colore)),
+        InlineKeyboardButton(text="🚗 Spostamenti", callback_data="catInfo#{}#sposta".format(colore)),
+    ], [
+        InlineKeyboardButton(text="🎓 Università", callback_data="catInfo#{}#uni".format(colore)),
+        InlineKeyboardButton(text="👷 Lavoro", callback_data="catInfo#{}#lavoro".format(colore)),
+    ], [
+        InlineKeyboardButton(text="😷 Mascherine", callback_data="catInfo#{}#mascherine".format(colore)),
+    ]])
+
+
+def backInfo(colore: str):
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="◀️ Indietro", callback_data="infoColore#{}".format(colore))
+    ]])
