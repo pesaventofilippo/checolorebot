@@ -211,8 +211,8 @@ def button_press(msg):
 
     elif button == "infoColore":
         if data in helpers.getColors():
-            bot.sendMessage(chatId, "{} Info sul colore: <b>{}</b>:".format(helpers.getEmoji(data), data),
-                            parse_mode="HTML", reply_markup=keyboards.categorieInfo(data))
+            bot.editMessageText((chatId, msgId), "{} Info sul colore <b>{}</b>:".format(helpers.getEmoji(data), data),
+                                parse_mode="HTML", reply_markup=keyboards.categorieInfo(data))
 
         else:
             bot.sendMessage(chatId, "🤔 Info sul colore non trovate.")
