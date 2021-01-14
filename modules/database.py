@@ -32,5 +32,5 @@ with db_session:
     dbRegions = select(r.name for r in Regione)[:]
     for reg in set(regionList) - set(dbRegions):
         Regione(name=reg)
-    if not Info.exists(lambda i: i.id == 0):
+    if not Info.exists(lambda i: i.id == 1):
         Info(data=rules)

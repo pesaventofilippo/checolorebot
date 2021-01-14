@@ -27,7 +27,7 @@ def runUpdates(now):
     for region in select(r for r in Regione):
         region.color = data[region.name]
         region.updatedTime = timestring
-    info = Info.get(id=0)
+    info = Info.get(id=1)
     info.data = api.getInfo()
 
 
