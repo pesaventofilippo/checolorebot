@@ -57,7 +57,7 @@ def getInfo():
                 parsed = "\n\n" \
                         "📌 <b>{}</b>\n" \
                         "{}".format(quest, answer)
-                if len(desc + parsed) < 4096:
+                if len(desc + parsed) < 4000:
                     desc += parsed
 
             data[color][tags[tagIndex]] = desc
