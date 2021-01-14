@@ -57,7 +57,7 @@ def getInfo():
                 answer = str(domanda.text).strip()
                 parsed = "\n\n" \
                         "📌 <b>{}</b>\n" \
-                        "{}".format(quest, answer)
+                        "👉 {}".format(quest, answer)
                 desc += parsed
                 if len(desc + parsed) > 2048:
                     pages.append(desc)

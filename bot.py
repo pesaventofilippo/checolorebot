@@ -154,8 +154,13 @@ def reply(msg):
 
 @db_session
 def button_press(msg):
-    chatId = msg['message']['chat']['id']
-    msgId = msg['message']['message_id']
+    try:
+        chatId = msg['message']['chat']['id']
+        msgId = msg['message']['message_id']
+        msgIdent = (chatId, msgId)
+    except KeyError:
+        chatId = msg['message']['from']['id']
+        msgIdent = msg['inline_message_id']
     query_split = msg['data'].split("#", 1)
     button = query_split[0]
     data = query_split[1]
@@ -164,15 +169,15 @@ def button_press(msg):
     if button == "setregion":
         user.region = Regione.get(name=data)
         user.status = "normal"
-        bot.editMessageText((chatId, msgId), "Benvenuto/a! 👋\n"
-                                             "{} <b>{}</b> oggi è: {}.\n"
-                                             "<i>Ultimo aggiornamento: {}</i>".format(helpers.getEmoji(user.region.color),
-                                             user.region.name, user.region.color, user.region.updatedTime),
+        bot.editMessageText(msgIdent, "Benvenuto/a! 👋\n"
+                                      "{} <b>{}</b> oggi è: {}.\n"
+                                      "<i>Ultimo aggiornamento: {}</i>".format(helpers.getEmoji(user.region.color),
+                                      user.region.name, user.region.color, user.region.updatedTime),
                             parse_mode="HTML", reply_markup=None)
 
     elif button == "notifTime":
         if data == "done":
-            bot.editMessageText((chatId, msgId), "🕙 Nuovo orario notifiche: <b>{}</b>!".format(user.dailyUpdatesTime),
+            bot.editMessageText(msgIdent, "🕙 Nuovo orario notifiche: <b>{}</b>!".format(user.dailyUpdatesTime),
                                 parse_mode="HTML", reply_markup=None)
 
         else:
@@ -192,28 +197,28 @@ def button_press(msg):
                 elif m == "30":
                     m = "00"
             user.dailyUpdatesTime = "{0}:{1}".format(h, m)
-            bot.editMessageText((chatId, msgId), "🕙 Orario notifiche giornaliere: {}".format(user.dailyUpdatesTime),
+            bot.editMessageText(msgIdent, "🕙 Orario notifiche giornaliere: {}".format(user.dailyUpdatesTime),
                                 reply_markup=keyboards.orari())
 
     elif button == "notifToggle":
         if data == "done":
             txt = "🔔 Notifiche attivate!" if user.wantsNotifications else "🔕 Notifiche disattivate."
-            bot.editMessageText((chatId, msgId), txt, parse_mode="HTML", reply_markup=None)
+            bot.editMessageText(msgIdent, txt, parse_mode="HTML", reply_markup=None)
 
         else:
             if data == "on":
                 user.wantsNotifications = True
             elif data == "off":
                 user.wantsNotifications = False
-            bot.editMessageText((chatId, msgId), "<b>Le notifiche sono {}.</b>\n\n"
-                                    "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
-                                    "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
-                                    "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
-                                    parse_mode="HTML", reply_markup=keyboards.notifiche())
+            bot.editMessageText(msgIdent, "<b>Le notifiche sono {}.</b>\n\n"
+                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
+                                          "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
+                                          "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
+                                          parse_mode="HTML", reply_markup=keyboards.notifiche())
 
     elif button == "infoColore":
         if data in helpers.getColors():
-            bot.editMessageText((chatId, msgId), "{} Info sul colore <b>{}</b>:".format(helpers.getEmoji(data), data),
+            bot.editMessageText(msgIdent, "{} Info sul colore <b>{}</b>:".format(helpers.getEmoji(data), data),
                                 parse_mode="HTML", reply_markup=keyboards.categorieInfo(data))
 
         else:
@@ -226,7 +231,7 @@ def button_press(msg):
         page = int(data_split[2])
 
         pages = helpers.getInfo(colore, categoria)
-        bot.editMessageText((chatId, msgId), pages[page], parse_mode="HTML",
+        bot.editMessageText(msgIdent, pages[page], parse_mode="HTML",
                             disable_web_page_preview=True,
                             reply_markup=keyboards.infoPages(colore, categoria, page, len(pages)))
 
