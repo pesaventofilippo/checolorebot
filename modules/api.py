@@ -52,7 +52,7 @@ def getInfo():
             desc = "ℹ️ <b>{}</b>\n".format(title)
             for domanda in listaDomande:
                 quest = str(domanda.strong.extract())
-                quest = quest.removeprefix("<strong>").removesuffix("</strong>").strip()
+                quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
                 answer = str(domanda.text).strip()
                 desc += "\n\n" \
                         "📌 <b>{}</b>\n" \
