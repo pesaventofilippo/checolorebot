@@ -1,6 +1,5 @@
-from pony.orm import Database, Required, Optional, Set
+from pony.orm import Database, Required, Optional, Set, Json
 from pony.orm import db_session, select
-from modules.helpers import regionList
 
 db = Database("sqlite", "../checolorebot.db", create_db=True)
 
@@ -20,11 +19,18 @@ class User(db.Entity):
     region = Optional(Regione)
 
 
+class Info(db.Entity):
+    data = Required(Json)
+
+
 # Create database
 db.generate_mapping(create_tables=True)
 
 # Create regions
 with db_session:
+    from modules.helpers import regionList, rules
     dbRegions = select(r.name for r in Regione)[:]
     for reg in set(regionList) - set(dbRegions):
         Regione(name=reg)
+    if not Info.exists(lambda i: i.id == 0):
+        Info(data=rules)

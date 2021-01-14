@@ -1,3 +1,5 @@
+from pony.orm import db_session
+
 regionList = ["Abruzzo", "Basilicata", "Bolzano", "Calabria", "Campania", "Emilia-Romagna",
               "Friuli-Venezia Giulia", "Lazio", "Liguria", "Lombardia", "Marche", "Molise",
               "Piemonte", "Puglia", "Sardegna", "Sicilia", "Toscana", "Trento", "Umbria",
@@ -67,8 +69,12 @@ def nameToId(name: str):
 
 
 def getInfo(color: str, category: str):
+    from modules.database import Info
+    with db_session:
+        info = Info.get(id=0)
+        raw = info.data
     try:
-        res = rules[color][category]
-        return res if res != "" else "🤔 Info non disponibili."
+        res = raw[color][category]
     except KeyError:
-        return "🤔 Info non disponibili."
+        res = ""
+    return res if res != "" else "🤔 Info non disponibili."

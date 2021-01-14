@@ -10,7 +10,7 @@ from json import load as jsload
 from os.path import abspath, dirname, join
 
 # Custom Modules
-from modules.database import User, Regione
+from modules.database import User, Regione, Info
 from modules import keyboards, helpers, api
 
 with open(join(dirname(abspath(__file__)), "settings.json")) as settings_file:
@@ -27,6 +27,8 @@ def runUpdates(now):
     for region in select(r for r in Regione):
         region.color = data[region.name]
         region.updatedTime = timestring
+    info = Info.get(id=0)
+    info.data = api.getInfo()
 
 
 @db_session
