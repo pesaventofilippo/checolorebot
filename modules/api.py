@@ -58,11 +58,10 @@ def getInfo():
                 parsed = "\n\n" \
                         "📌 <b>{}</b>\n" \
                         "{}".format(quest, answer)
-                if len(desc + parsed) < 2048:
-                    desc += parsed
-                else:
+                desc += parsed
+                if len(desc + parsed) > 2048:
                     pages.append(desc)
-                    desc = parsed
+                    desc = ""
 
             if desc:
                 pages.append(desc)
