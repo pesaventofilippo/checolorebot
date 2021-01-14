@@ -247,6 +247,7 @@ def query(msg):
                              region.name, region.color, region.updatedTime),
                 parse_mode="HTML"
             ),
+            reply_markup=keyboards.infoColore(region.color),
             description="{} {}".format(helpers.getEmoji(region.color), region.color),
             thumb_url="https://pesaventofilippo.com/assets/images/projects/checolorebot.png"
         )
