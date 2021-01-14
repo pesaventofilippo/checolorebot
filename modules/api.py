@@ -54,9 +54,11 @@ def getInfo():
                 quest = str(domanda.strong.extract())
                 quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
                 answer = str(domanda.text).strip()
-                desc += "\n\n" \
+                parsed = "\n\n" \
                         "📌 <b>{}</b>\n" \
                         "{}".format(quest, answer)
+                if len(desc + parsed) < 4096:
+                    desc += parsed
 
             data[color][tags[tagIndex]] = desc
             tagIndex += 1
