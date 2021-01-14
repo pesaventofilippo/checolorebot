@@ -220,11 +220,15 @@ def button_press(msg):
             bot.sendMessage(chatId, "🤔 Info sul colore non trovate.")
 
     elif button == "catInfo":
-        data_split = data.split("#", 1)
+        data_split = data.split("#")
         colore = data_split[0]
         categoria = data_split[1]
-        bot.editMessageText((chatId, msgId), helpers.getInfo(colore, categoria),
-                            parse_mode="HTML", disable_web_page_preview=True, reply_markup=keyboards.backInfo(colore))
+        page = data_split[2]
+
+        pages = helpers.getInfo(colore, categoria)
+        bot.editMessageText((chatId, msgId), pages[page], parse_mode="HTML",
+                            disable_web_page_preview=True,
+                            reply_markup=keyboards.infoPages(colore, categoria, page, len(pages)))
 
 
 @db_session

@@ -49,6 +49,7 @@ def getInfo():
             listaDomande = section.findChild("div", class_="accordion_content_faq", recursive=True)
             listaDomande = listaDomande.findChildren("li")
 
+            pages = []
             desc = "ℹ️ <b>{}</b>\n".format(title)
             for domanda in listaDomande:
                 quest = str(domanda.strong.extract())
@@ -57,10 +58,15 @@ def getInfo():
                 parsed = "\n\n" \
                         "📌 <b>{}</b>\n" \
                         "{}".format(quest, answer)
-                if len(desc + parsed) < 4000:
+                if len(desc + parsed) < 2048:
                     desc += parsed
+                else:
+                    pages.append(desc)
+                    desc = parsed
 
-            data[color][tags[tagIndex]] = desc
+            if desc:
+                pages.append(desc)
+            data[color][tags[tagIndex]] = pages
             tagIndex += 1
 
     return data
