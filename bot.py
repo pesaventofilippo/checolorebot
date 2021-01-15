@@ -150,8 +150,8 @@ def reply(msg):
                         parse_mode="HTML", reply_markup=keyboards.settings_menu())
 
     elif chatId > 0:
-        if text.startswith("/start info#"):
-            color = text.split("#", 1)[1]
+        if text.startswith("/start info_"):
+            color = text.split("_", 1)[1]
             if color in helpers.getColors():
                 bot.sendMessage(chatId, "{} Info sul colore <b>{}</b>:".format(helpers.getEmoji(color), color),
                                 parse_mode="HTML", reply_markup=keyboards.categorieInfo(color))
@@ -186,8 +186,7 @@ def button_press(msg):
 
         elif data == "notifiche":
             bot.editMessageText(msgIdent, "<b>Le notifiche sono {}.</b>\n\n"
-                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
-                                          "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
+                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?"
                                           "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
                                 parse_mode="HTML", reply_markup=keyboards.notifiche())
 

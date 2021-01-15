@@ -42,7 +42,7 @@ def infoColore(colore: str):
 
 def infoColorePvt(colore: str):
     return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="ℹ️ Maggiori informazioni", url="tg://resolve?domain=checolorebot&start=info#{}".format(colore))
+        InlineKeyboardButton(text="ℹ️ Maggiori informazioni", url="tg://resolve?domain=checolorebot&start=info_{}".format(colore))
     ]])
 
 
