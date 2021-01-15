@@ -74,7 +74,7 @@ def reply(msg):
                                 "<b>Sviluppo:</b> <a href=\"https://pesaventofilippo.com\">Filippo Pesavento</a>\n"
                                 "<b>Progetto OpenSource:</b> <a href=\"https://github.com/pesaventofilippo/checolorebot\">GitHub</a>\n"
                                 "<b>Fonte dati:</b> <a href=\"http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adottate-dal-governo/15638\">Governo</a>\n"
-                                "<b>Utenti attuali:</b> <code>{}</code".format(len(list(select(u for u in User)))),
+                                "<b>Utenti attuali:</b> <code>{}</code>".format(len(list(select(u for u in User)))),
                                 parse_mode="HTML", disable_web_page_preview=True)
 
     elif text == "/help":
