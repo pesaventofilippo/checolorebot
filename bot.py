@@ -145,10 +145,6 @@ def reply(msg):
                 mess += "\n\n{} Regioni di colore <b>{}</b>:".format(helpers.getEmoji(color), color)
                 for regione in sorted(regioni, key=lambda r: r.name):
                     mess += "\n- {}".format(("<b>"+regione.name+"</b>") if user.region == regione else regione.name)
-
-        regions = select(r for r in Regione)[:]
-        for regione in sorted(regions, key=lambda r: r.name):
-            mess += "\n{} <b>{}</b>: {}".format(helpers.getEmoji(regione.color), regione.name, regione.color)
         bot.sendMessage(chatId, mess, parse_mode="HTML")
 
     elif text == "/settings":
