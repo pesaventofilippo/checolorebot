@@ -66,23 +66,27 @@ def reply(msg):
     user = User.get(chatId=chatId)
 
 
-    if text == "/about":
+    if text == "/info":
         bot.sendMessage(chatId, "ℹ️ <b>Informazioni sul bot</b>\n"
                                 "CheColoreBot è un bot creato e sviluppato da Filippo Pesavento, per risolvere il "
                                 "problema di non sapere mai ogni giorno di che colore sia la propria regione.\n"
                                 "Problemi dell'era covid...\n\n"
-                                "<b>Sviluppo:</b> <a href=\"https://t.me/pesaventofilippo\">Filippo Pesavento</a>\n"
-                                "<b>Hosting:</b> Filippo Pesavento", parse_mode="HTML", disable_web_page_preview=True)
+                                "<b>Sviluppo:</b> <a href=\"https://pesaventofilippo.com\">Filippo Pesavento</a>\n"
+                                "<b>Progetto OpenSource:</b> <a href=\"https://github.com/pesaventofilippo/checolorebot\">GitHub</a>\n"
+                                "<b>Fonte dati:</b> <a href=\"http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adottate-dal-governo/15638\">Governo</a>\n"
+                                "<b>Utenti attuali:</b> <code>{}</code".format(len(list(select(u for u in User)))),
+                                parse_mode="HTML", disable_web_page_preview=True)
 
     elif text == "/help":
         bot.sendMessage(chatId, "Ciao, sono <b>CheColoreBot</b>! 👋🏻\n"
                                 "Posso dirti di che \"colore\" sono le regioni ogni giorno e mandarti promemoria.\n\n"
                                 "<b>Lista dei comandi</b>:\n"
                                 "- /start - Colore regione\n"
+                                "- /panoramica - Lista colore regioni\n"
                                 "- /setregion - Scegli/Cambia regione\n"
                                 "- /orario - Scegli orario notifiche\n"
                                 "- /notifiche - Attiva/Disattiva notifiche\n"
-                                "- /about - Informazioni sul bot\n"
+                                "- /info - Informazioni sul bot\n"
                                 "- /annulla - Annulla comando"
                                 "", parse_mode="HTML")
 
@@ -132,6 +136,13 @@ def reply(msg):
                                 "<i>Ultimo aggiornamento: {}</i>".format(name, helpers.getEmoji(user.region.color),
                                 user.region.name, user.region.color, user.region.updatedTime),
                         parse_mode="HTML", reply_markup=keyboards.infoColore(user.region.color))
+
+    elif text == "/panoramica":
+        mess = "📊 <b>Panoramica regioni</b>\n"
+        regions = select(r for r in Regione)[:]
+        for regione in sorted(regions, key=lambda r: r.name):
+            mess += "\n{} <b>{}</b>: {}".format(helpers.getEmoji(regione.color), regione.name, regione.color)
+        bot.sendMessage(chatId, mess, parse_mode="HTML")
 
     elif text == "/setregion":
         bot.sendMessage(chatId, "Scegli la tua regione:\n\n"
