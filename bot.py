@@ -144,6 +144,11 @@ def reply(msg):
             mess += "\n{} <b>{}</b>: {}".format(helpers.getEmoji(regione.color), regione.name, regione.color)
         bot.sendMessage(chatId, mess, parse_mode="HTML")
 
+    elif text == "/settings":
+        bot.sendMessage(chatId, "🛠 <b>Impostazioni</b>\n"
+                                "Ecco le impostazioni del bot. Cosa vuoi modificare?",
+                        parse_mode="HTML", reply_markup=keyboards.settings_menu())
+
     elif chatId > 0:
         if text.startswith("/start info#"):
             color = text.split("#", 1)[1]
