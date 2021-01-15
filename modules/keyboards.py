@@ -36,7 +36,13 @@ def notifiche():
 
 def infoColore(colore: str):
     return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="ℹ️ Cosa significa?", callback_data="infoColore#{}".format(colore))
+        InlineKeyboardButton(text="ℹ️ Maggiori informazioni", callback_data="infoColore#{}".format(colore))
+    ]])
+
+
+def infoColorePvt(colore: str):
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="ℹ️ Maggiori informazioni", url="tg://resolve?domain=checolorebot&start=info#{}".format(colore))
     ]])
 
 
@@ -90,3 +96,19 @@ def infoPages(colore: str, categoria: str, page: int=0, totPages: int=1):
         ], [
             InlineKeyboardButton(text="↩️ Menù", callback_data="infoColore#{}".format(colore))
         ]])
+
+
+def settings_menu():
+    return InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(text="📊 Cambia regione", callback_data="settings#regione")
+            ], [
+                InlineKeyboardButton(text="🔔 Attiva/Disattiva notifiche", callback_data="settings#notifiche")
+            ], [
+                InlineKeyboardButton(text="🕙 Orario notifiche", callback_data="settings#orario")
+            ]])
+
+
+def tryInline():
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text="💬 Seleziona una chat", switch_inline_query="")
+    ]])

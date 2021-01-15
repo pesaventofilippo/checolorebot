@@ -25,14 +25,8 @@ def runUpdates(now):
     data = api.getData()
     timestring = now.strftime("%H:%M")
     for region in select(r for r in Regione):
-        oldColor = region.color
         region.color = data[region.name]
         region.updatedTime = timestring
-        if region.color != oldColor:
-            for user in region.users:
-                bot.sendMessage(user.chatId, "{} <b>{}</b> è passato al colore: {}"
-                                             "".format(helpers.getEmoji(region.color), region.name, region.color),
-                                parse_mode="HTML", reply_markup=keyboards.infoColore(region.color))
     info = Info.get(id=1)
     info.data = api.getInfo()
 
@@ -43,9 +37,13 @@ def runDailyUpdates(now):
         userHour = user.dailyUpdatesTime.split(":")
         if int(userHour[0]) == now.hour and int(userHour[1]) == now.minute:
             try:
+                if user.chatId < 0:
+                    keys = keyboards.infoColorePvt(user.region.color)
+                else:
+                    keys = keyboards.infoColore(user.region.color)
                 bot.sendMessage(user.chatId, "Buongiorno! 👋\n"
                                              "{} <b>{}</b> oggi è: {}.".format(helpers.getEmoji(user.region.color),
-                                             user.region.name, user.region.color), parse_mode="HTML")
+                                             user.region.name, user.region.color), parse_mode="HTML", reply_markup=keys)
             except (TelegramError, BotWasBlockedError):
                 pass
 
@@ -55,7 +53,7 @@ def reply(msg):
     chatId = msg['chat']['id']
     name = msg['from']['first_name']
     if "text" in msg:
-        text = msg['text'].replace("@" + bot.getMe()["username"], "")
+        text = msg['text'].replace("@checolorebot", "")
     else:
         if chatId > 0:
             bot.sendMessage(chatId, "🤨 Media non supportati. /help")
@@ -83,12 +81,12 @@ def reply(msg):
                                 "<b>Lista dei comandi</b>:\n"
                                 "- /start - Colore regione\n"
                                 "- /panoramica - Lista colore regioni\n"
-                                "- /setregion - Scegli/Cambia regione\n"
-                                "- /orario - Scegli orario notifiche\n"
-                                "- /notifiche - Attiva/Disattiva notifiche\n"
-                                "- /info - Informazioni sul bot\n"
-                                "- /annulla - Annulla comando"
-                                "", parse_mode="HTML")
+                                "- /settings - Cambia impostazioni bot\n"
+                                "- /info - Informazioni sul bot\n\n"
+                                "<b>Nota:</b> Se in qualsiasi chat scrivi @checolorebot, posso mandare un messaggio già "
+                                "pronto con le informazioni di una regione: comodo per far conoscere il bot ai tuoi amici!\n"
+                                "Clicca il tasto qui sotto per provare!"
+                                "", parse_mode="HTML", reply_markup=keyboards.tryInline())
 
     elif text.startswith("/broadcast ") and chatId in js_settings["admins"]:
         bdText = text.split(" ", 1)[1]
@@ -125,17 +123,19 @@ def reply(msg):
                                     "<i>Nota: il Trentino è diviso nelle province di Trento e Bolzano.</i>".format(name),
                             parse_mode="HTML", reply_markup=keyboards.regions())
 
-
     elif text == "/annulla":
         bot.sendMessage(chatId, "😴 Nessun comando da annullare!")
 
 
     elif text == "/start":
+        if chatId < 0:
+            keys = keyboards.infoColorePvt(user.region.color)
+        else:
+            keys = keyboards.infoColore(user.region.color)
         bot.sendMessage(chatId, "Benvenuto/a, <b>{}</b>!\n"
                                 "{} <b>{}</b> oggi è: {}.\n"
                                 "<i>Ultimo aggiornamento: {}</i>".format(name, helpers.getEmoji(user.region.color),
-                                user.region.name, user.region.color, user.region.updatedTime),
-                        parse_mode="HTML", reply_markup=keyboards.infoColore(user.region.color))
+                                user.region.name, user.region.color, user.region.updatedTime), parse_mode="HTML", reply_markup=keys)
 
     elif text == "/panoramica":
         mess = "📊 <b>Panoramica regioni</b>\n"
@@ -144,29 +144,18 @@ def reply(msg):
             mess += "\n{} <b>{}</b>: {}".format(helpers.getEmoji(regione.color), regione.name, regione.color)
         bot.sendMessage(chatId, mess, parse_mode="HTML")
 
-    elif text == "/setregion":
-        bot.sendMessage(chatId, "Scegli la tua regione:\n\n"
-                                "<i>Nota: il Trentino è diviso nelle province di Trento e Bolzano.</i>",
-                        parse_mode="HTML", reply_markup=keyboards.regions())
-
-    elif text == "/notifiche":
-        bot.sendMessage(chatId, "<b>Le notifiche sono {}.</b>\n\n"
-                                "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
-                                "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
-                                "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
-                        parse_mode="HTML", reply_markup=keyboards.notifiche())
-
-    elif text == "/orario":
-        if user.wantsNotifications:
-            bot.sendMessage(chatId, "🕙 Orario notifiche giornaliere: {}".format(user.dailyUpdatesTime),
-                            reply_markup=keyboards.orari())
-        else:
-            bot.sendMessage(chatId, "Hai disattivato le notifiche!\n"
-                                    "Usa /notifiche per attivarle.")
-
     elif chatId > 0:
-        bot.sendMessage(chatId, "Non ho capito...\n"
-                                "Serve aiuto? Premi /help")
+        if text.startswith("/start info#"):
+            color = text.split("#", 1)[1]
+            if color in helpers.getColors():
+                bot.sendMessage(chatId, "{} Info sul colore <b>{}</b>:".format(helpers.getEmoji(color), color),
+                                parse_mode="HTML", reply_markup=keyboards.categorieInfo(color))
+            else:
+                bot.sendMessage(chatId, "🤔 Info sul colore non trovate.")
+
+        else:
+            bot.sendMessage(chatId, "Non ho capito...\n"
+                                    "Serve aiuto? Premi /help")
 
 
 @db_session
@@ -183,14 +172,37 @@ def button_press(msg):
     data = query_split[1]
     user = User.get(chatId=chatId)
 
+
+    if button == "settings":
+        if data == "regione":
+            bot.editMessageText(msgIdent, "Scegli la tua regione:\n\n"
+                                          "<i>Nota: il Trentino è diviso nelle province di Trento e Bolzano.</i>",
+                                parse_mode="HTML", reply_markup=keyboards.regions())
+
+        elif data == "notifiche":
+            bot.editMessageText(msgIdent, "<b>Le notifiche sono {}.</b>\n\n"
+                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
+                                          "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
+                                          "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
+                                parse_mode="HTML", reply_markup=keyboards.notifiche())
+
+        elif data == "orario":
+            bot.editMessageText(msgIdent, "🕙 Orario notifiche giornaliere: {}".format(user.dailyUpdatesTime),
+                                reply_markup=keyboards.orari())
+
+
     if button == "setregion":
         user.region = Regione.get(name=data)
         user.status = "normal"
+        if chatId < 0:
+            keys = keyboards.infoColorePvt(user.region.color)
+        else:
+            keys = keyboards.infoColore(user.region.color)
         bot.editMessageText(msgIdent, "Benvenuto/a! 👋\n"
                                       "{} <b>{}</b> oggi è: {}.\n"
                                       "<i>Ultimo aggiornamento: {}</i>".format(helpers.getEmoji(user.region.color),
                                       user.region.name, user.region.color, user.region.updatedTime),
-                            parse_mode="HTML", reply_markup=None)
+                            parse_mode="HTML", reply_markup=keys)
 
     elif button == "notifTime":
         if data == "done":
@@ -269,7 +281,7 @@ def query(msg):
                              region.name, region.color, region.updatedTime),
                 parse_mode="HTML"
             ),
-            reply_markup=keyboards.infoColore(region.color),
+            reply_markup=keyboards.infoColorePvt(region.color),
             description="{} {}".format(helpers.getEmoji(region.color), region.color),
             thumb_url="https://pesaventofilippo.com/assets/images/projects/checolorebot.png"
         )
