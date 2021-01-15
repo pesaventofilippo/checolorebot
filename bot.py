@@ -69,7 +69,7 @@ def reply(msg):
                                 "CheColoreBot è un bot creato e sviluppato da Filippo Pesavento, per risolvere il "
                                 "problema di non sapere mai ogni giorno di che colore sia la propria regione.\n"
                                 "Problemi dell'era covid...\n\n"
-                                "- Sviluppo: <a href=\"https://pesaventofilippo.com\">Filippo Pesavento</a>\n"
+                                "- Sviluppo: <a href=\"https://t.me/pesaventofilippo\">Filippo Pesavento</a>\n"
                                 "- Progetto OpenSource: <a href=\"https://github.com/pesaventofilippo/checolorebot\">GitHub</a>\n"
                                 "- Fonte dati: <a href=\"http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adottate-dal-governo/15638\">Governo</a>\n"
                                 "- Utenti attuali: <b>{}</b>".format(len(list(select(u for u in User)))),
