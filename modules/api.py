@@ -25,6 +25,8 @@ def getInfo():
     html = BeautifulSoup(resp.content, "lxml")
 
     ids = {
+        "verde": "zona_verde",
+        "bianco": "zona_bianca",
         "giallo": "zona_gialla",
         "arancione": "zona_arancione",
         "rosso": "zona_rossa"

@@ -138,7 +138,14 @@ def reply(msg):
                                 user.region.name, user.region.color, user.region.updatedTime), parse_mode="HTML", reply_markup=keys)
 
     elif text == "/panoramica":
-        mess = "📊 <b>Panoramica regioni</b>\n"
+        mess = "📊 <b>Panoramica regioni</b>"
+        for color in helpers.getColors():
+            regioni = select(r for r in Regione if r.color == color)[:]
+            if regioni:
+                mess += "\n\n{} Regioni di colore <b>{}</b>:".format(helpers.getEmoji(color), color)
+                for regione in sorted(regioni, key=lambda r: r.name):
+                    mess += "\n- {}".format(("<b>"+regione.name+"</b>") if user.region == regione else regione.name)
+
         regions = select(r for r in Regione)[:]
         for regione in sorted(regions, key=lambda r: r.name):
             mess += "\n{} <b>{}</b>: {}".format(helpers.getEmoji(regione.color), regione.name, regione.color)
