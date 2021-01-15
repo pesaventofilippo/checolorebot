@@ -25,8 +25,14 @@ def runUpdates(now):
     data = api.getData()
     timestring = now.strftime("%H:%M")
     for region in select(r for r in Regione):
+        oldColor = region.color
         region.color = data[region.name]
         region.updatedTime = timestring
+        if region.color != oldColor:
+            for user in region.users:
+                bot.sendMessage(user.chatId, "{} <b>{}</b> è passato al colore: {}"
+                                             "".format(helpers.getEmoji(region.color), region.name, region.color),
+                                parse_mode="HTML", reply_markup=keyboards.infoColore(region.color))
     info = Info.get(id=1)
     info.data = api.getInfo()
 
