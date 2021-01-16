@@ -83,9 +83,10 @@ def reply(msg):
     elif text == "/help":
         bot.sendMessage(chatId, "Ciao, sono <b>CheColoreBot</b>! 👋🏻\n"
                                 "Posso dirti di che \"colore\" sono le regioni ogni giorno e mandarti promemoria.\n\n"
-                                "<b>Lista dei comandi</b>:\n"
+                                "<b>Lista dei comandi</b>\n"
                                 "- /start - Colore regione\n"
                                 "- /panoramica - Lista colore regioni\n"
+                                "- /help - Mostra questa lista\n"
                                 "- /settings - Cambia impostazioni bot\n"
                                 "- /info - Informazioni sul bot\n\n"
                                 "<b>Nota:</b> Se in qualsiasi chat scrivi @checolorebot, posso mandare un messaggio già "
@@ -212,7 +213,8 @@ def button_press(msg):
             keys = keyboards.infoColore(user.region.color)
         bot.editMessageText(msgIdent, "Benvenuto/a! 👋\n"
                                       "{} <b>{}</b> oggi è: {}.\n"
-                                      "<i>Ultimo aggiornamento: {}</i>".format(helpers.getEmoji(user.region.color),
+                                      "<i>Ultimo aggiornamento: {}</i>\n\n"
+                                      "Info importanti: /info".format(helpers.getEmoji(user.region.color),
                                       user.region.name, user.region.color, user.region.updatedTime),
                             parse_mode="HTML", reply_markup=keys)
 
