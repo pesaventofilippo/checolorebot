@@ -11,12 +11,15 @@ def getData():
     data = {}
     for region in regionList:
         data[region] = "n/a"
-        res = html.find("path", id=nameToId(region))
-        if res:
-            raw = res.attrs["onclick"]
-            for color in getColors():
-                if color in raw:
-                    data[region] = color
+        try:
+            res = html.find("path", id=nameToId(region))
+            if res:
+                raw = res.attrs["onclick"]
+                for color in getColors():
+                    if color in raw:
+                        data[region] = color
+        except Exception:
+            pass
     return data
 
 
@@ -38,36 +41,39 @@ def getInfo():
     data = {}
     for color in ids.keys():
         data[color] = {}
-        container = html.find("div", id=ids[color])
-        columns = container.findChildren("div", recursive=False)
-
-        sections = []
-        for col in columns:
-            sections.extend(col.findChildren("div", recursive=False))
-
-        tagIndex = 0
-        for section in sections:
-            title = section.findChild("p", class_="titolo_faq", recursive=True).text
-            listaDomande = section.findChild("div", class_="accordion_content_faq", recursive=True)
-            listaDomande = listaDomande.findChildren("li")
-
-            pages = []
-            desc = "ℹ️ <b>{}</b>\n".format(title)
-            for domanda in listaDomande:
-                quest = str(domanda.strong.extract())
-                quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
-                answer = str(domanda.text).strip()
-                parsed = "\n\n" \
-                        "📌 <b>{}</b>\n" \
-                        "👉 <i>{}</i>".format(quest, answer)
-                desc += parsed
-                if len(desc + parsed) > 2048:
+        try:
+            container = html.find("div", id=ids[color])
+            columns = container.findChildren("div", recursive=False)
+    
+            sections = []
+            for col in columns:
+                sections.extend(col.findChildren("div", recursive=False))
+    
+            tagIndex = 0
+            for section in sections:
+                title = section.findChild("p", class_="titolo_faq", recursive=True).text
+                listaDomande = section.findChild("div", class_="accordion_content_faq", recursive=True)
+                listaDomande = listaDomande.findChildren("li")
+    
+                pages = []
+                desc = "ℹ️ <b>{}</b>\n".format(title)
+                for domanda in listaDomande:
+                    quest = str(domanda.strong.extract())
+                    quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
+                    answer = str(domanda.text).strip()
+                    parsed = "\n\n" \
+                            "📌 <b>{}</b>\n" \
+                            "👉 <i>{}</i>".format(quest, answer)
+                    desc += parsed
+                    if len(desc + parsed) > 2048:
+                        pages.append(desc)
+                        desc = ""
+    
+                if desc:
                     pages.append(desc)
-                    desc = ""
-
-            if desc:
-                pages.append(desc)
-            data[color][tags[tagIndex]] = pages
+                data[color][tags[tagIndex]] = pages
             tagIndex += 1
 
+        except Exception:
+            pass
     return data
