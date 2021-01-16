@@ -77,4 +77,4 @@ def getInfo(color: str, category: str):
         res = raw[color][category]
     except KeyError:
         res = ""
-    return res if res != "" else "🤔 Info non disponibili."
+    return res if res else "🤔 Info non disponibili."
