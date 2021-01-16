@@ -214,7 +214,7 @@ def button_press(msg):
         bot.editMessageText(msgIdent, "Benvenuto/a! 👋\n"
                                       "{} <b>{}</b> oggi è: {}.\n"
                                       "<i>Ultimo aggiornamento: {}</i>\n\n"
-                                      "Info importanti: /info".format(helpers.getEmoji(user.region.color),
+                                      "Limitazione di responsabilità: /info".format(helpers.getEmoji(user.region.color),
                                       user.region.name, user.region.color, user.region.updatedTime),
                             parse_mode="HTML", reply_markup=keys)
 
@@ -254,8 +254,7 @@ def button_press(msg):
             elif data == "off":
                 user.wantsNotifications = False
             bot.editMessageText(msgIdent, "<b>Le notifiche sono {}.</b>\n\n"
-                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?\n"
-                                          "<b>Nota</b>: Se vuoi cambiare l'orario, usa /orario."
+                                          "Vuoi che ti mandi una notifica ogni giorno con il colore della tua regione?"
                                           "".format("🔔 Attive" if user.wantsNotifications else "🔕 Spente"),
                                           parse_mode="HTML", reply_markup=keyboards.notifiche())
 
