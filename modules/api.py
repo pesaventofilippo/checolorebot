@@ -51,28 +51,32 @@ def getInfo():
     
             tagIndex = 0
             for section in sections:
-                title = section.findChild("p", class_="titolo_faq", recursive=True).text
-                listaDomande = section.findChild("div", class_="accordion_content_faq", recursive=True)
-                listaDomande = listaDomande.findChildren("li")
-    
-                pages = []
-                desc = "ℹ️ <b>{}</b>\n".format(title)
-                for domanda in listaDomande:
-                    quest = str(domanda.strong.extract())
-                    quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
-                    answer = str(domanda.text).strip()
-                    parsed = "\n\n" \
-                            "📌 <b>{}</b>\n" \
-                            "👉 <i>{}</i>".format(quest, answer)
-                    desc += parsed
-                    if len(desc + parsed) > 2048:
+                try:
+                    title = section.findChild("p", class_="titolo_faq", recursive=True).text
+                    listaDomande = section.findChild("div", class_="accordion_content_faq", recursive=True)
+                    listaDomande = listaDomande.findChildren("li")
+
+                    pages = []
+                    desc = "ℹ️ <b>{}</b>\n".format(title)
+                    for domanda in listaDomande:
+                        quest = str(domanda.strong.extract())
+                        quest = quest.replace("<strong>", "").replace("</strong>", "").strip()
+                        answer = str(domanda.text).strip()
+                        parsed = "\n\n" \
+                                "📌 <b>{}</b>\n" \
+                                "👉 <i>{}</i>".format(quest, answer)
+                        desc += parsed
+                        if len(desc + parsed) > 2048:
+                            pages.append(desc)
+                            desc = ""
+
+                    if desc:
                         pages.append(desc)
-                        desc = ""
-    
-                if desc:
-                    pages.append(desc)
-                data[color][tags[tagIndex]] = pages
-            tagIndex += 1
+                    data[color][tags[tagIndex]] = pages
+                except Exception:
+                    data[color][tags[tagIndex]] = []
+                finally:
+                    tagIndex += 1
 
         except Exception:
             pass
