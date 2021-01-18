@@ -117,7 +117,7 @@ def reply(msg):
     elif text == "/setinfo" and chatId in js_settings["admins"]:
         global infoText
         tSplit = text.split(" ", 1)
-        if len(tSplit) == 1:
+        if len(tSplit) == 2:
             infoText = tSplit[1]
             bot.sendMessage(chatId, "✅ Info impostata a:\n{}".format(infoText), parse_mode="HTML")
         else:
