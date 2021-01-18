@@ -18,6 +18,7 @@ with open(join(dirname(abspath(__file__)), "settings.json")) as settings_file:
 
 bot = Bot(js_settings["token"])
 updatesEvery = js_settings["updateEveryMin"]
+infoText = ""
 
 
 @db_session
@@ -113,6 +114,16 @@ def reply(msg):
         totalUsers = len(select(u for u in User)[:])
         bot.sendMessage(chatId, "👤 Utenti totali: <b>{}</b>".format(totalUsers), parse_mode="HTML")
 
+    elif text == "/setinfo" and chatId in js_settings["admins"]:
+        global infoText
+        tSplit = text.split(" ", 1)
+        if len(tSplit) == 1:
+            infoText = tSplit[1]
+            bot.sendMessage(chatId, "✅ Info impostata a:\n{}".format(infoText), parse_mode="HTML")
+        else:
+            infoText = ""
+            bot.sendMessage(chatId, "✅ Info ripristinata!", parse_mode="HTML")
+
 
     elif user.status != "normal":
         if text == "/annulla":
@@ -140,8 +151,9 @@ def reply(msg):
             keys = keyboards.infoColore(user.region.color)
         bot.sendMessage(chatId, "Benvenuto/a, <b>{}</b>!\n"
                                 "{} <b>{}</b> oggi è: {}.\n"
-                                "<i>Ultimo aggiornamento: {}</i>".format(name, helpers.getEmoji(user.region.color),
-                                user.region.name, user.region.color, user.region.updatedTime), parse_mode="HTML", reply_markup=keys)
+                                "<i>Ultimo aggiornamento: {}</i>\n\n"
+                                "{}".format(name, helpers.getEmoji(user.region.color), user.region.name, user.region.color,
+                                            user.region.updatedTime, infoText), parse_mode="HTML", reply_markup=keys)
 
     elif text == "/panoramica":
         mess = "📊 <b>Panoramica regioni</b>"
