@@ -75,11 +75,12 @@ def reply(msg):
                                 "delle azioni che gli utenti potrebbero compiere in base a queste: tutti i dati riportati "
                                 "sono presi dal sito del Governo, ma non c'è nessuna garanzia che le informazioni "
                                 "pubblicate siano aggiornate in tempo reale.\n\n"
-                                "- Sviluppo: <a href=\"https://t.me/pesaventofilippo\">Filippo Pesavento</a>\n"
-                                "- Progetto OpenSource: <a href=\"https://github.com/pesaventofilippo/checolorebot\">GitHub</a>\n"
+                                "- Sviluppo: <a href=\"https://pesaventofilippo.com\">Filippo Pesavento</a>\n"
+                                "- Progetto open-source: <a href=\"https://github.com/pesaventofilippo/checolorebot\">GitHub</a>\n"
                                 "- Fonte dati: <a href=\"http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adottate-dal-governo/15638\">Governo</a>\n"
-                                "- Utenti attuali: <b>{}</b>".format(len(list(select(u for u in User)))),
-                                parse_mode="HTML", disable_web_page_preview=True)
+                                "- Utenti attuali: <b>{}</b>\n"
+                                "<a href=\"https://t.me/pesaventofilippo\">Contattami</a>"
+                                "".format(len(list(select(u for u in User)))), parse_mode="HTML", disable_web_page_preview=True)
 
     elif text == "/help":
         bot.sendMessage(chatId, "Ciao, sono <b>CheColoreBot</b>! 👋🏻\n"
