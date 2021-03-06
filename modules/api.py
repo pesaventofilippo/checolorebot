@@ -15,6 +15,7 @@ def getData():
             res = html.find("path", id=nameToId(region))
             if res:
                 raw = res.attrs["onclick"]
+                raw = raw.replace("''", "'bianco'")
                 for color in getColors():
                     if color in raw:
                         data[region] = color
