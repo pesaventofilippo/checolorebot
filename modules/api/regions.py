@@ -1,8 +1,13 @@
 from requests import get
 from bs4 import BeautifulSoup
-from modules.helpers import regionList, getColors, nameToId
+from modules.helpers import regionList, nameToId
 
 baseUrl = "http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adottate-dal-governo/15638"
+
+colori = {
+    "#ffffff": "bianco",
+    "#ffd732": "giallo"
+}
 
 
 def getData():
@@ -14,11 +19,8 @@ def getData():
         try:
             res = html.find("path", id=nameToId(region))
             if res:
-                raw = res.attrs["onclick"]
-                raw = raw.replace("''", "'bianco'")
-                for color in getColors():
-                    if color in raw:
-                        data[region] = color
+                raw = res.attrs["fill"]
+                data[region] = colori.get(raw, "n/a")
         except Exception:
             pass
     return data

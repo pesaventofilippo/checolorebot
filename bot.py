@@ -11,7 +11,8 @@ from os.path import abspath, dirname, join
 
 # Custom Modules
 from modules.database import User, Regione, Info
-from modules import keyboards, helpers, api
+from modules import keyboards, helpers
+from modules.api import regions as regionsApi
 
 with open(join(dirname(abspath(__file__)), "settings.json")) as settings_file:
     js_settings = jsload(settings_file)
@@ -23,13 +24,13 @@ infoText = ""
 
 @db_session
 def runUpdates(now):
-    data = api.getData()
+    data = regionsApi.getData()
     timestring = now.strftime("%H:%M")
     for region in select(r for r in Regione):
         region.color = data[region.name]
         region.updatedTime = timestring
     info = Info.get(id=1)
-    info.data = api.getInfo()
+    info.data = regionsApi.getInfo()
 
 
 @db_session
@@ -115,7 +116,7 @@ def reply(msg):
         totalUsers = len(select(u for u in User)[:])
         bot.sendMessage(chatId, "👤 Utenti totali: <b>{}</b>".format(totalUsers), parse_mode="HTML")
 
-    elif text == "/setinfo" and chatId in js_settings["admins"]:
+    elif text.startswith("/setinfo") and chatId in js_settings["admins"]:
         global infoText
         tSplit = text.split(" ", 1)
         if len(tSplit) == 2:
@@ -309,7 +310,7 @@ def query(msg):
             ),
             reply_markup=keyboards.infoColorePvt(region.color),
             description="{} {}".format(helpers.getEmoji(region.color), region.color),
-            thumb_url="https://pesaventofilippo.com/assets/images/projects/checolorebot.png"
+            thumb_url="https://pesaventofilippo.com/assets/images/projects/checolorebot.webp"
         )
         for region in regions if text in helpers.nameToId(region.name)
     ]
