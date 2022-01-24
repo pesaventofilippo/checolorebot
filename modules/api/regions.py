@@ -6,7 +6,8 @@ baseUrl = "http://www.governo.it/it/articolo/domande-frequenti-sulle-misure-adot
 
 colori = {
     "#ffffff": "bianco",
-    "#ffd732": "giallo"
+    "#ffd732": "giallo",
+    "#ee7f01": "arancione"
 }
 
 
